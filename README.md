@@ -2,7 +2,7 @@
 
 👋 Welcome!
 
-É muito bom tê-lo(a) aqui️
+It's great to have you here!
 
 ## Project Informartion
 
