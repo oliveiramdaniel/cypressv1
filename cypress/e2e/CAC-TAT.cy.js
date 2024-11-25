@@ -164,7 +164,7 @@ describe('Customer Service Center TAT', function() {
         cy.get('#privacy a').should('have.attr', 'target', '_blank')
     })
 
-    it.only('accesses the privacy policy page by removing the target and then clicking on the link', function() {
+    it('accesses the privacy policy page by removing the target and then clicking on the link', function() {
         cy.get('#privacy a')
             .invoke('removeAttr', 'target')
             .click()
@@ -172,8 +172,6 @@ describe('Customer Service Center TAT', function() {
         cy.contains('CAC TAT - Privacy Policy').should('be.visible')
     })
 
-    it('tests the privacy policy page independently', function() {
-
-    })
+    //08
 
   })
