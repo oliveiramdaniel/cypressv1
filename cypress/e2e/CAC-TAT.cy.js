@@ -1,6 +1,7 @@
 /// <reference types="Cypress" />
 
 describe('Customer Service Center TAT', function() {
+    const THREE_SECONDS_IN_MS = 3000
     this.beforeEach(function() {
         cy.visit('./src/index.html')
     })
@@ -123,6 +124,8 @@ describe('Customer Service Center TAT', function() {
         cy.contains('button', 'Submit').click();
 
         cy.get('.error').should('be.visible')
+
+
     })
 
 //06
@@ -172,6 +175,73 @@ describe('Customer Service Center TAT', function() {
         cy.contains('CAC TAT - Privacy Policy').should('be.visible')
     })
 
-    //08
+    //11
+    it('Display message for 3 seconds', function() {
+        cy.clock();
+
+        const description = 'Test,Test,Test,Test,Test,Test,Test,Test,Test'
+
+        cy.get('#firstName').type('Daniel').should('have.value', 'Daniel');
+        cy.get('#lastName').type('Oliveira').should('have.value', 'Oliveira');
+        cy.get('#email').type('danielmoliveira@outlook.com').should('have.value', 'danielmoliveira@outlook.com');
+        cy.get('select').select('Blog');
+        cy.get('input[type="radio"][value="praise"]').check();
+        cy.get('input[type="checkbox"][value="email"]').check();
+        cy.get('#open-text-area').type(description, {delay: 0 })
+        cy.contains('button', 'Submit').click();
+
+        cy.get('.success').should('be.visible')
+        
+        cy.tick(THREE_SECONDS_IN_MS);
+
+        cy.get('.success').should('not.be.visible')
+
+    })
+
+    it('display and hide success and error messages using .invoke', () => {
+        cy.get('.success')
+          .should('not.be.visible')
+          .invoke('show')
+          .should('be.visible')
+          .and('contain', 'Message sent successfully.')
+          .invoke('hide')
+          .should('not.be.visible')
+        cy.get('.error')
+          .should('not.be.visible')
+          .invoke('show')
+          .should('be.visible')
+          .and('contain', 'Validate the required fields!')
+          .invoke('hide')
+          .should('not.be.visible')
+      })
+
+    it('fill the text area using the invoke command', () => {
+        const longText = Cypress._.repeat('0123456789', 20)
+        
+        cy.get('#open-text-area')
+            .invoke('val', longText)
+            .should('have.value', longText)
+    })
+
+    it('crate the HTTP Request', () => {
+        cy.request('https://cac-tat.s3.eu-central-1.amazonaws.com/index.html')
+            .should(function(response) {      
+                console.log(response)      
+                const {status, statusText, body } = response
+                expect(status).to.equal(200)
+                expect(statusText).to.equal('OK')
+                expect(body).to.include('CAC TAT')
+        })
+    })
+
+    it.only('Find the cat', () => {
+        cy.get('#cat')
+            .invoke('show')
+            .should('be.visible')
+        cy.get('#title')
+            .invoke('text', 'TEST TAT')
+        cy.get('#subtitle')
+            .invoke('text', 'This is my test')
+    })
 
   })
